@@ -72,29 +72,26 @@ function calculateUpdate(speed, distance, time, currentLimit, distanceToNextLimi
 
     // Check if there is a traffic light coming up
     if (distanceToTl !== 0) {
-        if(distanceToTl > didBrakeForTl) {
+        if (distanceToTl > didBrakeForTl) {
             didBrakeForTl = 0;
         }
 
-        // Only consider close enough traffic lights
-        if (distanceToTl < 50) {
-            let timeToTl = distanceToTl / metersPerSecond;
-            if (tlState === "Green") {
-                if (timeToTl < tlRemainingTime) {
-                    // We'll make it in time
-                } else {
-                    didBrakeForTl = distanceToTl;
-                    throttle = 0;
-                    brake = 100;
-                }
+        let timeToTl = distanceToTl / metersPerSecond;
+        if (tlState === "Green") {
+            if (timeToTl < tlRemainingTime) {
+                // We'll make it in time
             } else {
-                if (tlRemainingTime < timeToTl) {
-                    // TL will be green when we arrive, do nothing
-                } else {
-                    didBrakeForTl = distanceToTl;
-                    throttle = 0;
-                    brake = 100;
-                }
+                didBrakeForTl = distanceToTl;
+                throttle = 0;
+                // brake = 100;
+            }
+        } else {
+            if (tlRemainingTime < timeToTl) {
+                // TL will be green when we arrive, do nothing
+            } else {
+                didBrakeForTl = distanceToTl;
+                throttle = 0;
+                brake = 100;
             }
         }
     }
